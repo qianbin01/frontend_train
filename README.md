@@ -12,7 +12,7 @@
 7.每个input标签对应的说明文本都需要使用label标签，并且通过为input设置id属性，在lable标签中设置for=someld来让说明文本和相对应的input关联起来。
 
 新标签：
-![http://pd4ar0u4q.bkt.clouddn.com/h5%E6%96%B0%E5%85%83%E7%B4%A0.png](./h5新元素.png)
+![h5新元素](http://pd4ar0u4q.bkt.clouddn.com/h5%E6%96%B0%E5%85%83%E7%B4%A0.png)
 ##### 2 meta viewport相关
 ```htmlbars
 <!DOCTYPE html>  H5标准声明，使用 HTML5 doctype，不区分大小写
@@ -305,4 +305,4 @@ console.log(myTrim('    asdf    '));
 ```
 
 性能优化图
-![http://pd4ar0u4q.bkt.clouddn.com/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96.jpg](./性能优化.jpg)
+![性能优化](http://pd4ar0u4q.bkt.clouddn.com/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96.jpg)
