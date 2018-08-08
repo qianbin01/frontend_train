@@ -13,6 +13,7 @@
 
 新标签：
 ![Alt text](./h5新元素.png)
+
 #####2 meta viewport相关
 ```htmlbars
 <!DOCTYPE html>  H5标准声明，使用 HTML5 doctype，不区分大小写
