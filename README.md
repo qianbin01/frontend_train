@@ -1,6 +1,6 @@
-###前端问题记录
+### 前端问题记录
 #### html
-#####1 html语义化
+##### 1 html语义化
 意义：根据内容的结构化（内容语义化），选择合适的标签（代码语义化）便于开发者阅读和写出更优雅的代码的同时让浏览器的爬虫和机器很好地解析。
 注意：
 1.尽可能少的使用无语义的标签div和span；
@@ -13,8 +13,7 @@
 
 新标签：
 ![Alt text](./h5新元素.png)
-
-#####2 meta viewport相关
+##### 2 meta viewport相关
 ```htmlbars
 <!DOCTYPE html>  H5标准声明，使用 HTML5 doctype，不区分大小写
 <head lang=”en”> 标准的 lang 属性写法
@@ -49,7 +48,7 @@
 <meta http-equiv=”cache-control” content=”no-cache”>
 <meta http-equiv=”expires” content=”0″>
 ```
-#####3 canvas 相关
+##### 3 canvas 相关
 ```javascript
 使用前需要获得上下文环境，暂不支持3d
 常用api:
@@ -59,11 +58,11 @@
     4.strokeText("Hello world",200,300)空心文字
 各种东西！！！
 ```
-####CSS
-#####1.盒模型
+#### CSS
+##### 1.盒模型
 
-####javascript
-#####1 ["1", "2", "3"].map(parseInt)
+#### javascript
+##### 1 ["1", "2", "3"].map(parseInt)
 ```javascript
 首先, map接受两个参数, 一个回调函数 callback, 一个回调函数的this值
 
@@ -84,7 +83,7 @@ string	必需。要被解析的字符串。
 radix 可选。表示要解析的数字的基数。该值介于 2 ~ 36 之间。
 如果省略该参数或其值为 0，则数字将以 10 为基础来解析。如果它以 “0x” 或 “0X” 开头，将以 16 为基数。
 ```
-#####2 [[3,2,1].reduce(Math.pow), [].reduce(Math.pow)]
+##### 2 [[3,2,1].reduce(Math.pow), [].reduce(Math.pow)]
 ```javascript
 arr.reduce(callback[, initialValue])
 reduce接受两个参数, 一个回调, 一个初始值.
@@ -92,7 +91,7 @@ reduce接受两个参数, 一个回调, 一个初始值.
 需要注意的是 If the array is empty and no initialValue was provided, TypeError would be thrown.
 所以第二个表达式会报异常. 第一个表达式等价于 Math.pow(3, 2) => 9; Math.pow(9, 1) =>9
 ```
-#####3
+##### 3
 ```javascript
 var ary = [0,1,2];
 ary[10] = 10;
@@ -104,7 +103,7 @@ ary.filter(function(x) { return x === undefined;});
 10 in ary; => true
 也就是说 从 3 - 9 都是没有初始化的bug !, 这些索引并不存在与数组中. 在 array 的函数调用的时候是会跳过这些坑的.
 ```
-#####4 [typeof null, null instanceof Object]
+##### 4 [typeof null, null instanceof Object]
 ```javascript
 typeof 返回一个表示类型的字符串.
 instanceof 运算符用来检测 constructor.prototype 是否存在于参数 object 的原型链上.
@@ -133,7 +132,7 @@ Object      "object"
 6.symbol（ES6新增，文章后面有对着新类型的解释）Symbol 生成一个全局唯一的值。
 
 7.Object.（包括Object，Array，Function）
-#####6 promise 用法
+##### 6 promise 用法
 ```javascript
 定义
 var promise = new Promise(function(resolve, reject) {
@@ -157,7 +156,7 @@ promise.then(function(){
   //failure
 })
 ```
-#####7 es6 promise ajax
+##### 7 es6 promise ajax
 ```javascript
 定义
 const myHttpClient = url => {
@@ -187,7 +186,7 @@ myHttpClient('https://www.baidu.com').then(res => {
   console.log(error);
 });
 ```
-#####8闭包
+##### 8闭包
 ```javascript
 function foo(x) {
     var tmp = 3;
@@ -200,7 +199,7 @@ bar(10);
 结果是16
 es6通常用let const块级作用域代替
 ```
-#####9 什么是立即执行函数？使用立即执行函数的目的是什么？
+##### 9 什么是立即执行函数？使用立即执行函数的目的是什么？
 ```javascript
 常见两种方式
 1.(function(){...})()
@@ -281,7 +280,7 @@ console.log(d);
 let arr= [1, 2, 3, 3, 5, 7, 2, 6, 8];
 console.log([...new Set(arr)]);
 ```
-#####13正则实现trim()功能
+##### 13正则实现trim()功能
 ```javascript
 function myTrim(str) {
   let reg = /^\s+|\s+$/g;
@@ -289,7 +288,7 @@ function myTrim(str) {
 }
 console.log(myTrim('    asdf    '));
 ```
-#####14 JS原型
+##### 14 JS原型
 ```javascript
 1.每个对象都有 __proto__ 属性，但只有函数对象才有 prototype 属性
 2.个人粗略理解与python的类方法静态方法实例方法差不多
