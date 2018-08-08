@@ -781,19 +781,425 @@ b.html  与a.html不同源
 
 ##### 组件通信
 1.父传子用props,父用子用ref 子调父用$emit,无关系用Bus
-
-##### 
-
 ##### Vuex
+组件通信库，可以避免子组件无法改变props的弊端等
+mutations 同步操作， 用于改变状态 官方不推荐异步
+action 执行多个mutaions，官方推荐异步操作
+mapState、mapGetters、mapActions使用示例
+``` javascript
+<template>
+  <el-dialog :visible.sync="show"></el-dialog>
+</template>
 
+<script>
+import {mapState} from 'vuex';
+export default {
+  computed:{
+
+    //这里的三点叫做 : 扩展运算符
+    ...mapState({
+      show:state=>state.dialog.show
+    }),
+  }
+}
+</script>
+
+后两者类似
+```
 ##### VueRouter
+```javascript
+定义
+var routes = [
+    {
+        path:"/one",
 
+        component:导入的组件1
+    },
+    {
+        path:"/two",
+        component:导入的组件2
+    },
+];
+// 定义路由组件
+var router = new VueRouter({
+    routes
+});
+// 定义路由
+new Vue({
+    el:"#box",
+    router
+});
+ 访问设定的路由后 会将<router-view></router-view>替换成相应的模版
+ html访问方式 <router-link to="/one">One</router-link>(类似a标签)
+ js访问方式 this.$router.push('/one'); 
+ replace方式 替换当前页面
+ 携带的参数 可以通过this.$route.query.xxxx来获取
+``` 
 ##### Vue双向绑定
-原理：
-实现：
-缺点：
+原理：利用了 Object.defineProperty() 这个方法重新定义了对象获取属性值(get)和设置属性值(set)的操作来实现的。
+缺点：双向数据流是自动管理状态的, 但是在实际应用中会有很多不得不手动处理状态变化的逻辑, 使得程序复杂度上升, 难以调试。
 
-##### Computed 
-用处：
+##### computed  watch methods
 用法：
-与methods区别：
+区别：
+1. 前两者自动追踪数据，执行相关函数，最后一个手动调用；
+2. computed是计算属性，用法与data一致
+3. watch像事件监听，对象发生变化时，执行相关操作
+4. methods与js中执行方法类似
+5. computed通常只有get属性
+6. 数据变化的同时进行异步操作或者是比较大的开销，那么watch为最佳选择
+7. watch的对象必须事先声明
+#### 算法相关
+##### 各种排序实现
+相关数据
+![表格](http://pd4ar0u4q.bkt.clouddn.com/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E7%AD%89%E7%AD%89.png)
+```javascript
+// 冒泡排序: 比较两个相邻的项，如果第一个大于第二个则交换他们的位置,元素项向上移动至正确的顺序，就好像气泡往上冒一样
+冒泡demo:
+function bubbleSort(arr) {
+    let len = arr.length;
+    for (let i = 0; i < len; i++) {
+        for (let j = 0; j < len - 1 - i; j++) {
+            if (arr[j] > arr[j+1]) {        //相邻元素两两对比
+                [arr[j + 1], arr[j]] = [arr[j], arr[j + 1]];
+            }
+        }
+    }
+    return arr;
+}
+// 1) 首先，在数组中选择一个中间项作为主元
+// 2) 创建两个指针，左边的指向数组第一个项，右边的指向最后一个项，移动左指针，直到找到一个比主元大的项，接着，移动右边的指针，直到找到一个比主元小的项，然后交换它们。重复这个过程，直到
+// 左侧的指针超过了右侧的指针。这个使比主元小的都在左侧，比主元大的都在右侧。这一步叫划分操作
+// 3) 接着，算法对划分后的小数组（较主元小的值组成的的小数组， 以及较主元大的值组成的小数组）重复之前的两个步骤，直到排序完成
+快排demo:
+function quickSort(arr, left, right) {
+    let len = arr.length;
+    let partitionIndex;
+    left = typeof left !== 'number' ? 0 : left;
+    right = typeof right !== 'number' ? len - 1 : right;
+    if (left < right) {
+        partitionIndex = partition(arr, left, right);
+        quickSort(arr, left, partitionIndex - 1);
+        quickSort(arr, partitionIndex + 1, right);
+    }
+    return arr;
+}
+
+function partition(arr, left, right) {     //分区操作
+    let pivot = left;                      //设定基准值（pivot）
+    let index = pivot + 1;
+    for (let i = index; i <= right; i++) {
+        if (arr[i] < arr[pivot]) {
+            [arr[i], arr[index]] = [arr[index], arr[i]];
+            index++;
+        }
+    }
+    [arr[pivot], arr[index - 1]] = [arr[index - 1], arr[pivot]];
+    return index - 1;
+}
+// 选择排序：大概思路是找到最小的放在第一位，找到第二小的放在第二位，以此类推 算法复杂度O(n^2)
+选择demo:
+function selectionSort(arr) {
+	let len = arr.length;
+	let minIndex;
+	for (let i = 0; i < len - 1; i++) {
+		minIndex = i;
+		for (let j = i + 1; j < len; j++) {
+			if (arr[j] < arr[minIndex]) {     //寻找最小的数
+			    minIndex = j;                 //将最小数的索引保存
+		    }
+		}
+		[arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];
+	}
+return arr;
+}
+// 插入排序：每次排一个数组项，假设数组的第一项已经排序，接着，把第二项与第一项进行对比，第二项是该插入到第一项之前还是之后，第三项是该插入到第一项之前还是第一项之后还是第三项
+插入demo:
+function insertionSort(arr) {
+	let len = arr.length;
+	let preIndex, current;
+	for (let i = 1; i < len; i++) {
+	    preIndex = i - 1;
+	    current = arr[i];
+	    while (preIndex >= 0 && arr[preIndex] > current) {
+		    arr[preIndex + 1] = arr[preIndex];
+		    preIndex--;
+	    }
+	    arr[preIndex + 1] = current;
+	}
+	return arr;
+}
+// 归并排序：Mozilla Firefox 使用归并排序作为Array.prototype.sort的实现，而chrome使用快速排序的一个变体实现的,前面三种算法性能不好，但归并排序性能不错 算法复杂度O(nlog^n)
+// 归并排序是一种分治算法。本质上就是把一个原始数组切分成较小的数组，直到每个小数组只有一个位置，接着把小数组归并成较大的数组，在归并过程中也会完成排序，直到最后只有一个排序完毕的大数组
+归并demo:
+function mergeSort(arr) {  //采用自上而下的递归方法
+    let len = arr.length;
+    if(len < 2) {
+        return arr;
+    }
+    let middle = Math.floor(len / 2),
+    left = arr.slice(0, middle),
+    right = arr.slice(middle);
+    return merge(mergeSort(left), mergeSort(right));
+}
+
+function merge(left, right){
+    let result = [];
+    while (left.length && right.length) {
+        if (left[0] <= right[0]) {
+            result.push(left.shift());
+        } else {
+            result.push(right.shift());
+        }
+    }
+    result.push(...left);
+    result.push(...right);
+    return result;
+}
+//堆排序：堆排序把数组当中二叉树来排序而得名。
+// 1）索引0是树的根节点；2）除根节点为，任意节点N的父节点是N/2；3）节点L的左子节点是2*L；4）节点R的右子节点为2*R + 1
+// 本质上就是先构建二叉树，然后把根节点与最后一个进行交换，然后对剩下对元素进行二叉树构建，进行交换，直到剩下最后一个
+堆demo:
+var len;    //因为声明的多个函数都需要数据长度，所以把len设置成为全局变量
+
+function buildMaxHeap(arr) {   //建立大顶堆
+    len = arr.length;
+    for (let i = Math.floor(len / 2); i >= 0; i--) {
+        heapify(arr, i);
+    }
+}
+
+function heapify(arr, i) {     //堆调整
+    let left = 2 * i + 1;
+    let right = 2 * i + 2;
+    let largest = i;
+    if (left < len && arr[left] > arr[largest]) {
+        largest = left;
+    }
+    if (right < len && arr[right] > arr[largest]) {
+        largest = right;
+    }
+    if (largest !== i) {
+        [arr[i], arr[largest]] = [arr[largest], arr[i]];
+        heapify(arr, largest);
+    }
+}
+
+function heapSort(arr) {
+    buildMaxHeap(arr);
+    for (let i = arr.length - 1; i > 0; i--) {
+        [arr[0],arr[i]]=[arr[i],arr[0]];
+        len--;
+        heapify(arr, 0);
+    }
+    return arr;
+}
+```
+##### 二分查找
+思路
+（1）首先，从有序数组的中间的元素开始搜索，如果该元素正好是目标元素（即要查找的元素），则搜索过程结束，否则进行下一步。
+（2）如果目标元素大于或者小于中间元素，则在数组大于或小于中间元素的那一半区域查找，然后重复第一步的操作。
+（3）如果某一步数组为空，则表示找不到目标元素。
+```javascript
+// 非递归算法
+function binary_search(arr, key) {
+    let low = 0;
+    let high = arr.length - 1;
+    while(low <= high){
+        let mid = parseInt((high + low) / 2);
+        if(key === arr[mid]){
+            return  mid;
+        }else if(key > arr[mid]){
+            low = mid + 1;
+        }else if(key < arr[mid]){
+            high = mid -1;
+        }else{
+            return -1;
+        }
+    }
+}
+      
+
+// 递归算法
+function binary_search(arr,low, high, key) {
+    if (low > high){
+        return -1;
+    }
+    let mid = parseInt((high + low) / 2);
+    if(arr[mid] === key){
+        return mid;
+    }else if (arr[mid] > key){
+        high = mid - 1;
+        return binary_search(arr, low, high, key);
+    }else if (arr[mid] < key){
+        low = mid + 1;
+        return binary_search(arr, low, high, key);
+    }
+};
+```
+##### 二叉树相关
+``` javascript
+创建
+function Node(data,left,right){
+	this.data = data;//数值
+	this.left = left;//左节点
+	this.right = right;//右节点
+};
+插入二叉树
+function insert(node,data){
+	//创建一个新的节点
+	let newNode  = new Node(data,null,null);
+	//判断是否存在根节点，没有将新节点存入
+	if(node == null){
+		node = newNode;
+	}else{
+		//获取根节点
+		let current = node;
+		let parent;
+		while(true){
+			//将当前节点保存为父节点
+			parent = current;
+			//将小的数据放在左节点
+			if(data < current.data){
+				//获取当前节点的左节点
+				//判断当前节点下的左节点是否有数据
+				current = current.left;
+				if(current == null){
+					//如果没有数据将新节点存入当前节点下的左节点
+					parent.left = newNode;
+					break;
+				}
+			}else{
+				current = current.right;
+				if(current == null){
+					parent.right = newNode;
+					break;
+				}
+			}
+		}    
+	}
+}
+翻转二叉树
+function invertTree(node) {
+	if (node !== null) {
+		node.left, node.right = node.left, node.right;
+		invertTree(node.left);
+		invertTree(node.right);
+	}
+	return node;
+}
+```
+#### 网络安全相关
+##### XSS CSRF
+XSS(跨站脚本攻击)，恶意的注入html代码，其他用户访问时，会被执行
+特点：能注入恶意的HTML/JavaScript代码到用户浏览的网页上，从而达到Cookie资料窃取、会话劫持、钓鱼欺骗等攻击
+防御手段：
++ 浏览器禁止页面的JS访问带有HttpOnly属性的Cookie
++ 两端进行输入格式检查
++ 通过编码转义的方式进行输出检查
+CSRF(攻击跨站请求伪造)
+特点：重要操作的所有参数都是可以被攻击者猜测到的。攻击者预测出URL的所有参数与参数值，才能成功地构造一个伪造的请求。
+防御手段：
++ token验证机制，比如请求数据字段中添加一个token，响应请求时校验其有效性
++ 用户操作限制，比如验证码（繁琐，用户体验差）
++ 请求来源限制，比如限制HTTP Referer才能完成操作（防御效果相比较差）
+实践中常用第一种
+####  webpack相关
+#####打包体积
+优化思路
+1. 提取第三方库或通过引用外部文件的方式引入第三方库
+2. 代码压缩插件UglifyJsPlugin
+3. 服务器启用gzip压缩
+4. 按需加载资源文件 require.ensure
+5. 优化devtool中的source-map
+6. 剥离css文件，单独打包
+7. 去除不必要插件，通常就是开发环境与生产环境用同一套配置文件导致
+#####打包效率
+1. 开发环境采用增量构建，启用热更新
+2. 开发环境不做无意义的工作如提取css计算文件hash等
+3. 配置devtool
+4. 选择合适的loader
+5. 个别loader开启cache 如babel-loader
+6. 第三方库采用引入方式
+7. 提取公共代码
+8. 优化构建时的搜索路径 指明需要构建目录及不需要构建目录
+9. 模块化引入需要的部分
+##### Loader
+编写一个loader
+```javascript
+loader就是一个node模块，它输出了一个函数。当某种资源需要用这个loader转换时，这个函数会被调用。并且，这个函数可以通过提供给它的this上下文访问Loader API。
+reverse-txt-loader
+定义
+module.exports = function(src) {
+  //src是原文件内容（abcde），下面对内容进行处理，这里是反转
+  var result = src.split('').reverse().join(''); 
+  //返回JavaScript源码，必须是String或者Buffer
+  return `module.exports = '${result}'`;
+}
+使用
+{
+	test: /\.txt$/,
+	use: [
+		{
+			'./path/reverse-txt-loader'
+		}
+	]
+},
+```
+##### plugins
+使用范围更广，通常只需要require()然后添加到plugins数组中，且需要new一个
+#### 其他
+##### URL到界面显示发生了什么
+1. DNS解析
+先本地缓存找，在一层层找
+将常见的地址解析成唯一对应的ip地址基本顺序为：本地域名服务器->根域名服务器->com顶级域名服务器依次类推下去,找到后记录并缓存下来如www.google.com为<br><b>. -> .com -> google.com. -> www.google.com.</b>
+2. TCP连接
+三次握手，只要没收到确认消息就要重新发
+	1. 主机向服务器发送一个建立连接的请求（您好，我想认识您）；
+	2. 服务器接到请求后发送同意连接的信号（好的，很高兴认识您）；
+	3. 主机接到同意连接的信号后，再次向服务器发送了确认信号（我也很高兴认识您），自此，主机与服务器两者建立了连接。
+3. 发送HTTP请求
+浏览器会分析这个url，并设置好请求报文发出。请求报文中包括请求行、请求头、空行、请求主体。https默认请求端口443， http默认80。
+常见的http请求如下
+``` htmlbars
+POST / HTTP1.1
+Host:www.wrox.com
+User-Agent:Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727; .NET CLR 3.0.04506.648; .NET CLR 3.5.21022)
+Content-Type:application/x-www-form-urlencoded
+Content-Length:40
+Connection: Keep-Alive
+
+name=Professional%20Ajax&publisher=Wiley
+第一部分：请求行，第一行说明是post请求，以及http1.1版本。
+第二部分：请求头部，第二行至第六行。
+第三部分：空行，第七行的空行。
+第四部分：请求数据，第八行。
+4. 服务器处理请求并返回HTTP报文
+后端处理返回http报文如下
+```
+
+``` htmlbars
+HTTP/1.1 200 OK
+Date: Fri, 22 May 2009 06:07:21 GMT
+Content-Type: text/html; charset=UTF-8
+
+<html>
+      <head></head>
+      <body>
+            <!--body goes here-->
+      </body>
+</html>
+第一行为状态行，（HTTP/1.1）表明HTTP版本为1.1版本，状态码为200，状态消息为（ok）
+第二行和第三行为消息报头，
+Date:生成响应的日期和时间；Content-Type:指定了MIME类型的HTML(text/html),编码类型是UTF-8
+第三部分：空行，消息报头后面的空行是必须的
+第四部分：响应正文，服务器返回给客户端的文本信息。
+空行后面的html部分为响应正文。
+```
+5. 浏览器解析渲染页面
++ 通过HTML解析器解析HTML文档，构建一个DOM Tree，同时通过CSS解析器解析HTML中存在的CSS，构建Style Rules，两者结合形成一个Attachment。
++ 通过Attachment构造出一个呈现树（Render Tree）
++ Render Tree构建完毕，进入到布局阶段（layout/reflow），将会为每个阶段分配一个应出现在屏幕上的确切坐标。
++ 最后将全部的节点遍历绘制出来后，一个页面就展现出来了。
+遇到script会停下来执行，所以通常把script放在底部
+6. 连接结束
