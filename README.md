@@ -1,6 +1,16 @@
 ### 前端问题记录
+1. [HTML相关](#html)
+2. [CSS相关](#css)
+3. [JAVASCRIPT相关](#javascript)
+4. [DOM相关](#dom)
+5. [HTTP相关](#http)
+4. [VUE相关](#vue)
+5. [算法相关](#sort)
+6. [网络安全相关](#web)
+7. [webpack相关](#webpack)
+8. [其他](#other)
 #### Html相关
-##### 1 html语义化
+##### <div id="html">1 html语义化</div>
 意义：根据内容的结构化（内容语义化），选择合适的标签（代码语义化）便于开发者阅读和写出更优雅的代码的同时让浏览器的爬虫和机器很好地解析。
 注意：
 1.尽可能少的使用无语义的标签div和span；
@@ -58,7 +68,10 @@
     4.strokeText("Hello world",200,300)空心文字
 各种东西！！！
 ```
-#### CSS相关
+##### 新标签兼容低版本
+1. ie9之前版本通过createElement创建html5新标签
+2. 引入html5shiv.js
+#### <div id="css">CSS相关</div>
 ##### 1.盒模型
 1.ie盒模型算上border、padding及自身（不算margin），标准的只算上自身窗体的大小
 css设置方法如下
@@ -251,7 +264,42 @@ grid方式
 	zoom:1
 } 
 ```
-#### JavaScript相关
+##### 自适应布局
+思路：
+1. 左侧浮动或者绝对定位，然后右侧margin撑开
+2. 使用div包含，然后靠负margin形成bfc
+3. 使用flex
+##### 画三角形
+```css
+#item {
+	width: 0;
+	height: 0;
+	border-left: 50px solid transparent;
+	border-right: 50px solid transparent;
+	border-top: 50px solid transparent;
+	border-bottom: 50px solid blue;
+	background: white;
+}
+```
+##### link @import导入css
+1. link是XHTML标签，除了加载CSS外，还可以定义RSS等其他事务；@import属于CSS范畴，只能加载CSS。
+2. link引用CSS时，在页面载入时同时加载；@import需要页面网页完全载入以后加载。
+3. link无兼容问题；@import是在CSS2.1提出的，低版本的浏览器不支持。
+3. ink支持使用Javascript控制DOM去改变样式；而@import不支持。
+##### animation
+![](http://pd4ar0u4q.bkt.clouddn.com/animation.png)
+##### 长宽比方案
+1. 使用padding方式结合calc实现
+2. 长宽一项设置百分比另一项aspect-ratio实现（需借助插件实现）
+##### display相关
+1. block:div等容器类型
+2. inline:img span等行内类型
+3. table系列：将样式变成table类型
+4. flex:重点把握，非常强大
+5. grid:同上
+6. inline-block:可设置宽度，两者间有一点间隙
+7. inherit:继承父级
+#### <div id="javascript">JavaScript相关</div>
 ##### 1 ["1", "2", "3"].map(parseInt)
 ```javascript
 首先, map接受两个参数, 一个回调函数 callback, 一个回调函数的this值
@@ -387,7 +435,8 @@ function foo(x) {
 var bar = foo(2); // bar 现在是一个闭包
 bar(10);
 结果是16
-es6通常用let const块级作用域代替
+es6通常用let const块级作用域代替，
+闭包缺点，ie中会引起内存泄漏，严格来说是ie的缺点不是闭包的问题
 ```
 ##### 9 什么是立即执行函数？使用立即执行函数的目的是什么？
 ```javascript
@@ -491,15 +540,76 @@ console.log(myTrim('    asdf    '));
 ```javascript
 1.使用原型继承（既继承了父类的模板，又继承了父类的原型对象。优点是继承了父类的模板，又继承了父类的原型对象，缺点就是父类实例传参，不是子类实例化传参，不符合常规语言的写法）
 2.使用call的方式（继承了父类的模板，不继承了父类的原型对象。优点是方便了子类实例传参，缺点就是不继承了父类的原型对象）
-3.
 ```
+##### 17 手写jquery插件
+```javascript
+(function ($) {
+	$.fn.myPlugins = function (options) {
+	  //参数赋值
+	  options = $.extend(defaults, options);//对象合并
+	  this.each(function () {
+	      //执行代码逻辑
+	  });
+	};
+})(jQuery);
 
+$(selector).myPlugins({参数});
+```
+##### 18 数组合并去重排序
+```javascript
+let arr1 = [1, 25, 2, 26, 1234, 6, 213];
+let arr2 = [2, 6, 2134, 6, 31, 623];
+let c = [...new Set([...arr1, ...arr2])].sort((a, b) => {
+	return a - b;
+});
+```
+##### 19 call apply
+作用：在函数调用时改变函数的执行上下文也就是this的值
+区别：call采用不定长的参数列表，而apply使用一个参数数组。
 性能优化图
 ![性能优化](http://pd4ar0u4q.bkt.clouddn.com/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96.jpg)
+##### 20 for 中setTimeOut
+要为循环题创建不同的循环副本
+##### 21 sort函数
+V8 引擎 sort 函数只给出了两种排序 InsertionSort 和 QuickSort，数量小于10的数组使用 插入，比10大的数组则使用 快排。
+##### 22 navigator
+![Navigator](http://pd4ar0u4q.bkt.clouddn.com/Navigator.png)
+##### 23 jquery绑定方式
+1. click后者覆盖
+2. bind后者覆盖
+3. on(jquery>=1.7)
+4. live
+5. delegate
+##### 24 事件流向
+1. 冒泡：子节点一层层冒泡到根节点
+2. 捕获顺序与冒泡相反
+3. addEventListener最后个参数true代表捕获反之代表冒泡
+4. 阻止冒泡不停止父节点捕获
+##### 25原生操作class
+```javascript
+//判断有无
+function hasClass(ele, cls) {
+	return ele.className.match(new RegExp("(\\s|^)" + cls + "(\\s|$)"));
+}
 
+//添加
+function addClass(ele, cls) {
+	if (!this.hasClass(ele, cls)) ele.className += " " + cls;
+}
 
-#### DOM相关
+//删除
+function removeClass(ele, cls) {
+	if (hasClass(ele, cls)) {
+		let reg = new RegExp("(\\s|^)" + cls + "(\\s|$)");
+		ele.className = ele.className.replace(reg, " ");
+	}
+}
 
+html5中加入classList 
+一系列操作
+兼容至IE10
+```
+#### <div id="dom">DOM相关</div>
 ##### dom事件模型
 DOM之事件模型分脚本模型、内联模型(同类一个，后者覆盖)、动态绑定(同类多个)
 demo
@@ -569,7 +679,7 @@ event：
 好处：给重复的节点添加相同操作，减少dom交互，提高性能
 实现思路：给父组件添加事件，通过事件冒泡，排查元素是否为指定元素，并进行系列操作
 
-#### HTTP相关
+#### <div id="http">HTTP相关</div>
 ##### 常见状态码
 <b>2开头 （请求成功）表示成功处理了请求的状态代码。</b>
 
@@ -641,7 +751,9 @@ sessionStorage不在不同的浏览器窗口中共享；localStorage 在所有�
 ##### GET POST区别
 
 ![get_post](http://pd4ar0u4q.bkt.clouddn.com/get_post.png)
-
+##### 请求行，请求头，请求体详解
+![如图](http://pd4ar0u4q.bkt.clouddn.com/http%E8%AF%B7%E6%B1%82%E4%B8%80%E4%BD%93.jpg)
+1,2,3请求行，4请求体，5请求体
 ##### 跨域、JSONP 、CORS、postMessage
 跨域概念解释：当前发起请求的域与该请求指向的资源所在的域不一样。这里的域指的是这样的一个概念：我们认为若协议 + 域名 + 端口号均相同，那么就是同域。
 如下表
@@ -772,9 +884,17 @@ b.html  与a.html不同源
     }, false);
 </script>
 ```
-
-
-#### Vue相关
+##### osi模型
+七层结构：物理层、数据链路层、网络层、传输层、会话层、表示层、应用层
+tcp ucp属于传输层；http属于应用层
+##### http2.0 http1
+1. HTTP2.0的基本单位为二进制帧
+2. HTTP2.0中帧具有优先级
+3. HTTP2.0的多路复用（ 1次连接）
+4. HTTP2.0压缩消息头
+5. HTTP2.0服务端推送
+6. HTTP2.0只适用于HTTPS的场景
+#### <div id="vue">Vue相关</div>
 
 ##### 生命周期顺序
 ![生命周期](http://pd4ar0u4q.bkt.clouddn.com/vue%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.png)
@@ -838,7 +958,6 @@ new Vue({
 ##### Vue双向绑定
 原理：利用了 Object.defineProperty() 这个方法重新定义了对象获取属性值(get)和设置属性值(set)的操作来实现的。
 缺点：双向数据流是自动管理状态的, 但是在实际应用中会有很多不得不手动处理状态变化的逻辑, 使得程序复杂度上升, 难以调试。
-
 ##### computed  watch methods
 用法：
 区别：
@@ -849,7 +968,7 @@ new Vue({
 5. computed通常只有get属性
 6. 数据变化的同时进行异步操作或者是比较大的开销，那么watch为最佳选择
 7. watch的对象必须事先声明
-#### 算法相关
+#### <div id="sort">算法相关</div>
 ##### 各种排序实现
 相关数据
 ![表格](http://pd4ar0u4q.bkt.clouddn.com/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E7%AD%89%E7%AD%89.png)
@@ -1089,7 +1208,14 @@ function invertTree(node) {
 	return node;
 }
 ```
-#### 网络安全相关
+``` javascript
+查找链表中倒数第k个结点
+2个思路
+1：先遍历出长度，然后查找长度-k+1的值
+2：2个指针，一个指针先走k-1，然后两个一起走到底部，后者就是结果
+```
+
+#### <div id="web">网络安全相关</div>
 ##### XSS CSRF
 XSS(跨站脚本攻击)，恶意的注入html代码，其他用户访问时，会被执行
 特点：能注入恶意的HTML/JavaScript代码到用户浏览的网页上，从而达到Cookie资料窃取、会话劫持、钓鱼欺骗等攻击
@@ -1104,7 +1230,7 @@ CSRF(攻击跨站请求伪造)
 + 用户操作限制，比如验证码（繁琐，用户体验差）
 + 请求来源限制，比如限制HTTP Referer才能完成操作（防御效果相比较差）
 实践中常用第一种
-####  webpack相关
+#### <div id="webpack"> webpack相关</div>
 #####打包体积
 优化思路
 1. 提取第三方库或通过引用外部文件的方式引入第三方库
@@ -1148,7 +1274,7 @@ module.exports = function(src) {
 ```
 ##### plugins
 使用范围更广，通常只需要require()然后添加到plugins数组中，且需要new一个
-#### 其他
+#### <div id="other">其他</div>
 ##### URL到界面显示发生了什么
 1. DNS解析
 先本地缓存找，在一层层找
@@ -1203,3 +1329,105 @@ Date:生成响应的日期和时间；Content-Type:指定了MIME类型的HTML(te
 + 最后将全部的节点遍历绘制出来后，一个页面就展现出来了。
 遇到script会停下来执行，所以通常把script放在底部
 6. 连接结束
+
+##### 组件封装
+目的：为了重用，提高开发效率和代码质量
+注意：低耦合，单一职责，可复用性，可维护性
+常用操作：
+1. 分析布局
+2. 初步开发
+3. 化繁为简
+4. 组件抽象
+
+##### JS异步加载
+1. 动态生成script标签
+2. 添加h5的async defer属性，前者乱序不适合依赖性加载
+3. async 是“下载完就执行”， defer 是“渲染完再执行”
+
+##### css与js动画差异
+1. css性能好
+2. css代码逻辑相对简单
+3. js动画控制好
+4. js兼容性好
+5. js可实现的动画多
+6. js可以添加事件
+
+#####  负载均衡
+多台服务器共同协作，不让其中某一台或几台超额工作，发挥服务器的最大作用
+1. http重定向负载均衡：调度者根据策略选择服务器以302响应请求，缺点只有第一次有效果，后续操作维持在该服务器
+2. dns负载均衡：解析域名时，访问多个ip服务器中的一个（可监控性较弱）
+3. 反向代理负载均衡：访问统一的服务器，由服务器进行调度访问实际的某个服务器，对统一的服务器要求大，性能受到 服务器群的数量
+
+##### CDN
+内容分发网络，基本思路是尽可能避开互联网上有可能影响数据传输速度和稳定性的瓶颈和环节，使内容传输的更快、更稳定。
+
+#####  内存泄漏
+定义：程序中己动态分配的堆内存由于某种原因程序未释放或无法释放引发的各种问题
+js中可能出现的内存泄漏情况
+结果：变慢，崩溃，延迟大等
+原因：
+1. 全局变量
+2. dom清空时，还存在引用
+3. ie中使用闭包
+4. 定时器未清理
+5. 子元素存在引起的内存泄露
+
+避免策略：
+1. 减少不必要的全局变量，或者生命周期较长的对象，及时对无用的数据进行垃圾回收；
+2. 注意程序逻辑，避免“死循环”之类的 ；
+3. 避免创建过多的对象  原则：不用了的东西要及时归还。 
+4. 减少层级过多的引用
+#####  babel原理
+ES6、7代码输入 -> babylon进行解析 -> 得到AST（抽象语法树）-> plugin用babel-traverse对AST树进行遍历转译 ->得到新的AST树->用babel-generator通过AST树生成ES5代码、
+
+##### promise
+特性：Promise 对象的错误具有冒泡性质，会一直向后传递，直到被捕获为止，也即是说，错误总会被下一个catch语句捕获
+
+##### js自定义事件
+三要素：
+document.createEvent()
+event.initEvent()
+element.dispatchEvent()
+``` javascript
+demo:
+(en:自定义事件名称，fn:事件处理函数，addEvent:为DOM元素添加自定义事件，triggerEvent:触发自定义事件)
+window.onload = function(){
+    var demo = document.getElementById("demo");
+    demo.addEvent("test",function(){console.log("handler1")});
+    demo.addEvent("test",function(){console.log("handler2")});
+    demo.onclick = function(){
+        this.triggerEvent("test");
+    }
+}
+Element.prototype.addEvent = function(en,fn){
+    this.pools = this.pools || {};
+    if(en in this.pools){
+        this.pools[en].push(fn);
+    }else{
+        this.pools[en] = [];
+        this.pools[en].push(fn);
+    }
+}
+Element.prototype.triggerEvent  = function(en){
+    if(en in this.pools){
+        var fns = this.pools[en];
+        for(var i=0,il=fns.length;i<il;i++){
+            fns[i]();
+        }
+    }else{
+        return;
+    }
+}
+```
+
+#####  es6模块 commonjs  amd cmd
+1.  CommonJS 的规范中，每个 JavaScript 文件就是一个独立的模块上下文（module context），在这个上下文中默认创建的属性都是私有的。也就是说，在一个文件定义的变量（还包括函数和类），都是私有的，对其他文件是不可见的。
+2.  CommonJS是同步加载模块,在浏览器中会出现堵塞情况，所以不适用
+3.  AMD 异步，需要定义回调define方式
+4.  es6 一个模块就是一个独立的文件，该文件内部的所有变量，外部无法获取。如果你希望外部能够读取模块内部的某个变量，就必须使用export关键字输出该变量
+5.  es6还可以导出类、方法，自动适用严格模式
+
+##### 前后端路由差别
+
+1.后端每次路由请求都是重新访问服务器
+2.前端路由实际上只是JS根据URL来操作DOM元素，根据每个页面需要的去服务端请求数据，返回数据后和模板进行组合。
