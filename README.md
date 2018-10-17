@@ -1,4 +1,6 @@
-### 前端问题记录
+### 前言
+文章涉及的内容可能不全面，但量很多，需要慢慢看。来源于各个地方，我花了很长的时间整理，希望对大家有帮助。但是难免会有打字的错误或理解的错误，希望发现的可以邮箱告诉我236490794@qq.com，我会及时的进行修改，旨在能帮到大家，谢谢。
+### 前端目录
 1. [HTML相关](#html)
 2. [CSS相关](#css)
 3. [JAVASCRIPT相关](#javascript)
@@ -11,18 +13,29 @@
 8. [其他](#other)
 #### Html相关
 ##### <div id="html">1 html语义化</div>
-意义：根据内容的结构化（内容语义化），选择合适的标签（代码语义化）便于开发者阅读和写出更优雅的代码的同时让浏览器的爬虫和机器很好地解析。
+意义：根据内容的结构化（内容语义化），选择合适的标签（代码语义化）便于开发者阅读和写出更优雅的
+![](https://user-gold-cdn.xitu.io/2018/9/10/165c37dfd17017d9?w=126&h=29&f=png&s=6565)
+![](https://user-gold-cdn.xitu.io/2018/9/10/165c37e061112680?w=126&h=29&f=png&s=6565)代码的同时让浏览器的爬虫和机器很好地解析。
 注意：
+
 1.尽可能少的使用无语义的标签div和span；
-2.在语义不明显时，既可以使用div或者p时，尽量用p, 因为p在默认情况下有上下间距，对兼容特殊终端有利；
+
+2.在语义不明显时，既可以使用div或者p时，尽量用p,
+因为p在默认情况下有上下间距，对兼容特殊终端有利；
+
 3.不要使用纯样式标签，如：b、font、u等，改用css设置。
+
 4.需要强调的文本，可以包含在strong或者em标签中（浏览器预设样式，能用CSS指定就不用他们），strong默认样式是加粗（不要用b），em是斜体（不用i）；
+
 5.使用表格时，标题要用caption，表头用thead，主体部分用tbody包围，尾部用tfoot包围。表头和一般单元格要区分开，表头用th，单元格用td；
+
 6.表单域要用fieldset标签包起来，并用legend标签说明表单的用途；
+
 7.每个input标签对应的说明文本都需要使用label标签，并且通过为input设置id属性，在lable标签中设置for=someld来让说明文本和相对应的input关联起来。
 
+
 新标签：
-![h5新元素](http://pd4ar0u4q.bkt.clouddn.com/h5%E6%96%B0%E5%85%83%E7%B4%A0.png)
+![h5新元素](https://user-gold-cdn.xitu.io/2018/9/9/165bd6dede604a15?w=886&h=698&f=png&s=338932)
 ##### 2 meta viewport相关
 ```htmlbars
 <!DOCTYPE html>  H5标准声明，使用 HTML5 doctype，不区分大小写
@@ -153,7 +166,7 @@ demo
 ```css
 不定宽块状元素居中
 .text_div{
-    margin:0 auto;
+    margin:0 auto;//且需要设置父级宽度
 }
 
 ```
@@ -187,6 +200,7 @@ demo
 .children {
     display: table-cell;
     vertical-align: middle;
+     text-align: center; 
 }
 ```
 ```css
@@ -248,7 +262,6 @@ grid方式
 + 给浮动元素父级设置高度
 + 父级同时浮动（需要给父级同级元素添加浮动）
 + 父级设置成inline-block，其margin: 0 auto居中方式失效
-+ 利用br标签的clear属性
 + 给父级添加overflow:hidden 清除浮动方法
 + 万能清除法 after伪类 清浮动（现在主流方法，推荐使用）
 ```css
@@ -285,9 +298,9 @@ grid方式
 1. link是XHTML标签，除了加载CSS外，还可以定义RSS等其他事务；@import属于CSS范畴，只能加载CSS。
 2. link引用CSS时，在页面载入时同时加载；@import需要页面网页完全载入以后加载。
 3. link无兼容问题；@import是在CSS2.1提出的，低版本的浏览器不支持。
-3. ink支持使用Javascript控制DOM去改变样式；而@import不支持。
+3. link支持使用Javascript控制DOM去改变样式；而@import不支持。
 ##### animation
-![](http://pd4ar0u4q.bkt.clouddn.com/animation.png)
+![](https://user-gold-cdn.xitu.io/2018/9/9/165bd6dede39a8b8?w=628&h=260&f=png&s=15869)
 ##### 长宽比方案
 1. 使用padding方式结合calc实现
 2. 长宽一项设置百分比另一项aspect-ratio实现（需借助插件实现）
@@ -499,7 +512,7 @@ let a = {
   }
 };
 let d = JSON.parse(JSON.stringify(a));//深复制包含子对象
-let c = {...a};//深拷贝单不包含子对象
+let c = {...a};//拷贝一层但不包含子对象
 let b = a;//浅拷贝
 b.bb = 22;
 c.cc = 33;
@@ -532,7 +545,7 @@ console.log(myTrim('    asdf    '));
 1.每个对象都有 __proto__ 属性，但只有函数对象才有 prototype 属性
 2.个人粗略理解与python的类方法静态方法实例方法差不多
 ```
-#####15 es6 class 
+##### 15 es6 class 
 ``` javascript
 面向对象，java中类
 ```
@@ -567,13 +580,13 @@ let c = [...new Set([...arr1, ...arr2])].sort((a, b) => {
 作用：在函数调用时改变函数的执行上下文也就是this的值
 区别：call采用不定长的参数列表，而apply使用一个参数数组。
 性能优化图
-![性能优化](http://pd4ar0u4q.bkt.clouddn.com/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96.jpg)
+![性能优化](https://user-gold-cdn.xitu.io/2018/9/9/165bd6dede48dfa8?w=643&h=397&f=jpeg&s=37967)
 ##### 20 for 中setTimeOut
 要为循环题创建不同的循环副本
 ##### 21 sort函数
 V8 引擎 sort 函数只给出了两种排序 InsertionSort 和 QuickSort，数量小于10的数组使用 插入，比10大的数组则使用 快排。
 ##### 22 navigator
-![Navigator](http://pd4ar0u4q.bkt.clouddn.com/Navigator.png)
+![Navigator](https://user-gold-cdn.xitu.io/2018/9/9/165bd6dedffbbbda?w=663&h=426&f=png&s=26813)
 ##### 23 jquery绑定方式
 1. click后者覆盖
 2. bind后者覆盖
@@ -738,7 +751,7 @@ event：
 
 #####  Cache-Control 和 Etag 的区别
 如下图
-![区别图](http://pd4ar0u4q.bkt.clouddn.com/%E5%8C%BA%E5%88%AB%E5%9B%BE.png)
+![区别图](https://user-gold-cdn.xitu.io/2018/9/9/165bd6dee12c01a7?w=639&h=205&f=png&s=2025)
 
 ##### Cookie sessionStorage  localStorage
 共同点：都是保存在浏览器端，且同源的。
@@ -750,16 +763,16 @@ sessionStorage不在不同的浏览器窗口中共享；localStorage 在所有�
 
 ##### GET POST区别
 
-![get_post](http://pd4ar0u4q.bkt.clouddn.com/get_post.png)
+![get_post](https://user-gold-cdn.xitu.io/2018/9/9/165bd6dee34a6606?w=808&h=479&f=png&s=36018)
 ##### 请求行，请求头，请求体详解
-![如图](http://pd4ar0u4q.bkt.clouddn.com/http%E8%AF%B7%E6%B1%82%E4%B8%80%E4%BD%93.jpg)
+![如图](https://user-gold-cdn.xitu.io/2018/9/9/165bd6dedf60ecfd?w=897&h=529&f=jpeg&s=111439)
 1,2,3请求行，4请求体，5请求体
 ##### 跨域、JSONP 、CORS、postMessage
 跨域概念解释：当前发起请求的域与该请求指向的资源所在的域不一样。这里的域指的是这样的一个概念：我们认为若协议 + 域名 + 端口号均相同，那么就是同域。
 如下表
-![图](http://pd4ar0u4q.bkt.clouddn.com/%E8%B7%A8%E5%9F%9F%E6%83%85%E5%86%B5%E6%A0%87%E8%AF%86.png)
+![图](https://user-gold-cdn.xitu.io/2018/9/9/165bd6dede8a98d1?w=532&h=203&f=png&s=12558)
 
-jsoup实现
+jsonp实现
 ```javascript
 原生
 <script>
@@ -897,7 +910,7 @@ tcp ucp属于传输层；http属于应用层
 #### <div id="vue">Vue相关</div>
 
 ##### 生命周期顺序
-![生命周期](http://pd4ar0u4q.bkt.clouddn.com/vue%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.png)
+![生命周期](https://user-gold-cdn.xitu.io/2018/9/9/165bd6dede933ba6?w=800&h=540&f=png&s=146684)
 
 ##### 组件通信
 1.父传子用props,父用子用ref 子调父用$emit,无关系用Bus
@@ -971,7 +984,7 @@ new Vue({
 #### <div id="sort">算法相关</div>
 ##### 各种排序实现
 相关数据
-![表格](http://pd4ar0u4q.bkt.clouddn.com/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E7%AD%89%E7%AD%89.png)
+![表格](https://user-gold-cdn.xitu.io/2018/9/9/165bd6dedf755d33?w=700&h=426&f=png&s=165000)
 ```javascript
 // 冒泡排序: 比较两个相邻的项，如果第一个大于第二个则交换他们的位置,元素项向上移动至正确的顺序，就好像气泡往上冒一样
 冒泡demo:
@@ -1431,3 +1444,6 @@ Element.prototype.triggerEvent  = function(en){
 
 1.后端每次路由请求都是重新访问服务器
 2.前端路由实际上只是JS根据URL来操作DOM元素，根据每个页面需要的去服务端请求数据，返回数据后和模板进行组合。
+
+
+![](https://user-gold-cdn.xitu.io/2018/9/9/165bd71739e1e878?w=281&h=271&f=png&s=29836)
